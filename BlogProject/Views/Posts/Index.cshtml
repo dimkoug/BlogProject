@@ -1,0 +1,116 @@
+﻿@model IEnumerable<BlogProject.Models.Posts>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <form asp-controller="Posts" asp-action="Index">
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" class="form-control" id="Title" aria-describedby="emailHelp" placeholder="Enter Title" name="Title">
+        </div>
+        <div class="form-group">
+            <label for="Title">Category</label>
+            @Html.DropDownList("CategoryId", ViewBag.Categories, "Please select", new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label for="Title">From</label>
+            <input type="text" class="form-control" id="from" name="from">
+        </div>
+        <div class="form-group">
+            <label for="Title">To</label>
+            <input type="text" class="form-control" id="to" name="to">
+        </div>
+        <p>
+            <input type="submit" value="Filter" />
+        </p>
+    </form>
+
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Published)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>Tags</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Published)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Title)
+                </td>
+                <td>
+                    @{
+                        if (item.TagPosts != null)
+                        {
+                            foreach (var tag in item.TagPosts)
+                            {
+                                <p><strong></strong> @tag.Tag.Title </p>
+                            }
+
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    }
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PostId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+
+            $('#from').datetimepicker({
+                format: 'MM-DD-YYYY HH:mm:ss'
+            });
+            $('#to').datetimepicker({
+                format: 'MM-DD-YYYY HH:mm:ss'
+            });
+        })
+    </script>
+}

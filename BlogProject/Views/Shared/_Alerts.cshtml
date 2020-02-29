@@ -1,0 +1,8 @@
+﻿@{
+    if (TempData.ContainsKey("key"))
+    {
+        <div class="alert alert-@TempData["key"]">
+            <strong>@TempData["key"]</strong> : @TempData["message"].
+        </div>
+    }
+}
