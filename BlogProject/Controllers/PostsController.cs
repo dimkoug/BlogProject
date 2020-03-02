@@ -27,34 +27,55 @@ namespace BlogProject.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index(string title, int? CategoryId, string from, string to, int pageNumber=1, int PageSize=1)
+        public async Task<IActionResult> Index(string CategoryOrder, string title, int? CategoryId, string from, string to, int pageNumber=1, int PageSize=5)
         {
             
             int ExcludeRecords = (PageSize * pageNumber) - PageSize;
-            var applicationDbContext = _context.GetPostList().Skip(ExcludeRecords).Take(PageSize);
+            ViewBag.CurrentCategoryOrder = CategoryOrder;
+            ViewBag.CurrentTitle = title;
+            ViewBag.CategoryOrder = String.IsNullOrEmpty(CategoryOrder) ? "category_desc" : "";
+            var applicationDbContext = from b in _context.GetPostList() select b;
+            var post_counter = applicationDbContext.Count();
+            switch (CategoryOrder)
+            {
+                case "category_desc":
+                    applicationDbContext = applicationDbContext.OrderByDescending(b => b.Category.Title);
+                    break;
+                default:
+                    applicationDbContext = applicationDbContext.OrderBy(b => b.Category.Title);
+                    break;
+
+            }
+            
+
+            applicationDbContext = applicationDbContext.Skip(ExcludeRecords).Take(PageSize);
             if (!String.IsNullOrEmpty(title))
             {
                 applicationDbContext = applicationDbContext.Where(c => c.Title.Contains(title));
+                post_counter = applicationDbContext.Count();
             }
             if (CategoryId > 0)
             {
                 applicationDbContext = applicationDbContext.Where(c => c.CategoryId == CategoryId);
+                post_counter = applicationDbContext.Count();
             }
             if (!String.IsNullOrEmpty(from))
             {
                 DateTime from_date = DateTime.Parse(from);
                 applicationDbContext = applicationDbContext.Where(c => c.DateCreated >= from_date);
+                post_counter = applicationDbContext.Count();
             }
             if (!String.IsNullOrEmpty(to))
             {
                 DateTime to_date = DateTime.Parse(to);
                 applicationDbContext = applicationDbContext.Where(c => c.DateCreated <= to_date);
+                post_counter = applicationDbContext.Count();
             }
             ViewBag.Categories = new SelectList(_context.GetCategoryList(), "CategoryId", "Title");
             var result = new PagedResult<Posts>
             {
                 Data = applicationDbContext.ToList(),
-                TotalItems = _context.GetPostList().Count(),
+                TotalItems = post_counter,
                 PageNumber = pageNumber,
                 PageSize = PageSize
             };

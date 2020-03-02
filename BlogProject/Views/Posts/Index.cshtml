@@ -15,7 +15,7 @@
     <form asp-controller="Posts" asp-action="Index">
         <div class="form-group">
             <label for="Title">Title</label>
-            <input type="text" class="form-control" id="Title" aria-describedby="emailHelp" placeholder="Enter Title" name="Title">
+            <input type="text" class="form-control" id="Title" aria-describedby="emailHelp" placeholder="Enter Title" name="Title" value="@ViewBag.CurrentTitle">
         </div>
         <div class="form-group">
             <label for="Title">Category</label>
@@ -51,7 +51,7 @@
                 DateCreated
             </th>
             <th>
-                Category
+                <a asp-action="Index" asp-route-CategoryOrder="@ViewBag.CategoryOrder" asp-route-PageNumber="@Model.PageNumber">Category</a>
             </th>
             <th>Tags</th>
             <th></th>
