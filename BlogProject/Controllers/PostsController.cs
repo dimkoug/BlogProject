@@ -11,6 +11,7 @@ using BlogProject.Data.services;
 using AutoMapper;
 using BlogProject.ViewModels;
 using System.Collections.ObjectModel;
+using cloudscribe.Pagination.Models;
 
 namespace BlogProject.Controllers
 {
@@ -26,9 +27,11 @@ namespace BlogProject.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index(string title, int? CategoryId, string from, string to)
+        public async Task<IActionResult> Index(string title, int? CategoryId, string from, string to, int pageNumber=1, int PageSize=1)
         {
-            var applicationDbContext = _context.GetPostList();
+            
+            int ExcludeRecords = (PageSize * pageNumber) - PageSize;
+            var applicationDbContext = _context.GetPostList().Skip(ExcludeRecords).Take(PageSize);
             if (!String.IsNullOrEmpty(title))
             {
                 applicationDbContext = applicationDbContext.Where(c => c.Title.Contains(title));
@@ -48,7 +51,14 @@ namespace BlogProject.Controllers
                 applicationDbContext = applicationDbContext.Where(c => c.DateCreated <= to_date);
             }
             ViewBag.Categories = new SelectList(_context.GetCategoryList(), "CategoryId", "Title");
-            return View(applicationDbContext);
+            var result = new PagedResult<Posts>
+            {
+                Data = applicationDbContext.ToList(),
+                TotalItems = _context.GetPostList().Count(),
+                PageNumber = pageNumber,
+                PageSize = PageSize
+            };
+            return View(result);
         }
 
         // GET: Posts/Details/5
@@ -96,6 +106,8 @@ namespace BlogProject.Controllers
             if (ModelState.IsValid)
             {
                 Posts model = _mapper.Map<Posts>(posts);
+                DateTime date = DateTime.Now;
+                model.DateCreated = date;
                 _context.AddPost(model);
                 _context.Commit();
                 return RedirectToAction(nameof(Index));

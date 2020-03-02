@@ -8,7 +8,7 @@ namespace BlogProject.Data.services
 {
     public interface IBlogRepository
     {
-        IEnumerable<Posts> GetPostList();
+        List<Posts> GetPostList();
         Posts GetPost(int? Id);
 
         void AddPost(Posts post);
@@ -19,7 +19,7 @@ namespace BlogProject.Data.services
         bool PostExists(int? Id);
 
 
-        IEnumerable<Categories> GetCategoryList();
+        List<Categories> GetCategoryList();
         Categories GetCategory(int? Id);
 
         void AddCategory(Categories category);
@@ -30,7 +30,7 @@ namespace BlogProject.Data.services
         bool CategoryExists(int? Id);
 
 
-        IEnumerable<Tags> GetTagList();
+        List<Tags> GetTagList();
         Tags GetTag(int? Id);
 
         void AddTag(Tags tag);

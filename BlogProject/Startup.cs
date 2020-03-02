@@ -39,6 +39,7 @@ namespace BlogProject
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddCloudscribePagination();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

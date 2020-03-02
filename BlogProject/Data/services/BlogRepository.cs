@@ -110,7 +110,7 @@ namespace BlogProject.Data.services
             return _context.Categories.Include(c => c.Parent).FirstOrDefault(a => a.CategoryId == Id);
         }
 
-        public IEnumerable<Categories> GetCategoryList()
+        public List<Categories> GetCategoryList()
         {
             return _context.Categories.Include(c => c.Parent).ToList();
         }
@@ -125,7 +125,7 @@ namespace BlogProject.Data.services
             return _context.Posts.Include(p => p.Category).Include(ta=> ta.TagPosts).ThenInclude(taq=> taq.Tag).FirstOrDefault(a => a.PostId == Id);
         }
 
-        public IEnumerable<Posts> GetPostList()
+        public List<Posts> GetPostList()
         {
             return _context.Posts.Include(p => p.Category).Include(ta => ta.TagPosts).ThenInclude(taq => taq.Tag).ToList();
         }
@@ -140,7 +140,7 @@ namespace BlogProject.Data.services
             return _context.Tags.FirstOrDefault(a => a.TagId == Id);
         }
 
-        public IEnumerable<Tags> GetTagList()
+        public List<Tags> GetTagList()
         {
             return _context.Tags.ToList();
         }

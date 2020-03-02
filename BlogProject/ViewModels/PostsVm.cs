@@ -15,7 +15,7 @@ namespace BlogProject.ViewModels
         [Required]
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime? DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public virtual Categories Category { get; set; }
         public virtual List<TagPosts> TagPosts { get; set; }

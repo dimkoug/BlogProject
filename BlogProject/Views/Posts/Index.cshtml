@@ -1,7 +1,9 @@
-﻿@model IEnumerable<BlogProject.Models.Posts>
+﻿@model cloudscribe.Pagination.Models.PagedResult<Posts>
 
 @{
     ViewData["Title"] = "Index";
+    ViewData["Controller"] = "Posts";
+    ViewData["Action"] = "Index";
 }
 
 <h1>Index</h1>
@@ -37,26 +39,26 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Published)
+                Published
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                DateCreated
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                Category
             </th>
             <th>Tags</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Data)
         {
             <tr>
                 <td>
@@ -101,9 +103,15 @@
     </tbody>
 </table>
 
+
+<partial name="_PaginationPartial" model="Model" view-data="ViewData" />
+
+
+
+
 @section Scripts{
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $('#from').datetimepicker({
                 format: 'MM-DD-YYYY HH:mm:ss'
